@@ -14,7 +14,7 @@ class Board
       end
     end
 
-    john_paul = Queen.new([4, 4], self.board)
+    john_paul = King.new([4, 4], self.board)
     self.board[4][4] = john_paul
 
     john_paul.moves.each do |position|
@@ -55,34 +55,23 @@ end
 
 class SlidingPiece < Piece
 
+  attr_accessor :deltas, :display
+
   def initialize(pos, board)
     super(pos, board)
+    @deltas = []
   end
-
 
   def moves
-    possible_moves = []
-    one_space_moves = [[1, 0], [0, 1], [0, -1], [-1, 0]]
-    # self.pos
-    one_space_moves.each do |deltas|
-      possible_moves << helper_move(deltas)
+    [].tap do |valid_moves|
+      self.deltas.each do |each_delta|
+        current_position = self.position
+        2.times do  # REPLACE with valid? #
+          current_position = (current_position.first + each_delta.first), (current_position.last + each_delta.last)
+          valid_moves << current_position
+        end
+      end
     end
-
-    possible_moves.flatten(1)
-  end
-
-  def helper_move(deltas)
-    current_position = self.position
-
-    delta_move = []
-
-    2.times do
-    # while valid?
-      current_position = (current_position.first + deltas.first), (current_position.last + deltas.last)
-      delta_move << current_position
-    end
-    delta_move
-
   end
 
   def valid?
@@ -91,145 +80,101 @@ class SlidingPiece < Piece
 
 end
 
-
 class Bishop < SlidingPiece
-
-  attr_accessor :display
 
   def initialize(pos, board)
     super(pos, board)
-    @display = ' B '
-  end
-
-
-  def moves
-    possible_moves = []
-    one_space_moves = [[1, 1], [-1, -1], [1, -1], [-1, 1]]
-    # self.pos
-    one_space_moves.each do |deltas|
-      possible_moves << helper_move(deltas)
-    end
-
-    possible_moves.flatten(1)
-  end
-
-  def helper_move(deltas)
-    current_position = self.position
-
-    delta_move = []
-
-    2.times do
-    # while valid?
-      current_position = (current_position.first + deltas.first), (current_position.last + deltas.last)
-      delta_move << current_position
-    end
-    delta_move
-
-  end
-
-  def valid?
-    true
+    @deltas = [[1, 1], [-1, -1], [1, -1], [-1, 1]]
+  @display = " \u265D "
   end
 
 end
 
 class Rook <  SlidingPiece
 
-  attr_accessor :display
 
   def initialize(pos, board)
     super(pos, board)
-    @display = ' R '
-  end
-
-
-  def moves
-    possible_moves = []
-    one_space_moves = [[1, 0], [0, 1], [0, -1], [-1, 0]]
-    # self.pos
-    one_space_moves.each do |deltas|
-      possible_moves << helper_move(deltas)
-    end
-
-    possible_moves.flatten(1)
-  end
-
-  def helper_move(deltas)
-    current_position = self.position
-
-    delta_move = []
-
-    2.times do
-    # while valid?
-      current_position = (current_position.first + deltas.first), (current_position.last + deltas.last)
-      delta_move << current_position
-    end
-    delta_move
-
-  end
-
-  def valid?
-    true
+    @deltas = [[1, 0], [0, 1], [0, -1], [-1, 0]]
+      @display = " \u265C "
   end
 
 end
 
 class Queen < SlidingPiece
 
-  attr_accessor :display
-
   def initialize(pos, board)
     super(pos, board)
-    @display = ' Q '
-  end
-
-
-  def moves
-    possible_moves = []
-    one_space_moves = [[1, 0], [0, 1], [0, -1], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
-    # self.pos
-    one_space_moves.each do |deltas|
-      possible_moves << helper_move(deltas)
-    end
-
-    possible_moves.flatten(1)
-  end
-
-  def helper_move(deltas)
-    current_position = self.position
-
-    delta_move = []
-
-    2.times do
-    # while valid?
-      current_position = (current_position.first + deltas.first), (current_position.last + deltas.last)
-      delta_move << current_position
-    end
-    delta_move
-
-  end
-
-  def valid?
-    true
+    @deltas = [[1, 0], [0, 1], [0, -1], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+    @display = " \u265B "
   end
 
 end
 
 class SteppingPiece < Piece
 
+  attr_accessor :deltas, :display
+
   def initialize(pos, board)
     super(pos, board)
+    @deltas = []
   end
 
   def moves
+    [].tap do |valid_moves|
+      self.deltas.each do |each_delta|
+        current_position = self.position
+        1.times do  # REPLACE with valid? #
+          current_position = (current_position.first + each_delta.first), (current_position.last + each_delta.last)
+          valid_moves << current_position
+        end
+      end
+    end
   end
 
+  def valid?
+    true
+  end
+
+
+
+
+
 end
+
+class Knight < SteppingPiece
+
+  def initialize(pos, board)
+    super(pos, board)
+    @deltas = [[2, 1], [1, 2], [-1, -2], [-2, -1], [-1, 2], [1, -2], [2, -1], [-2, 1]]
+    @display = " \u265E "
+  end
+
+
+end
+
+class King < SteppingPiece
+
+  def initialize(pos, board)
+    super(pos, board)
+    @deltas = [[1, 0], [0, 1], [0, -1], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+    @display = " \u265A "
+  end
+
+
+end
+
+
+
+
+
+
 
 class Pawn < Piece
 
   def initialize(pos, board)
     super(pos, board)
+    @display = " \u265F "
   end
 
   def moves
