@@ -63,7 +63,7 @@ class Board
 
     end #generate pieces
 
-    self.board[2][4] =  King.new([2, 4], self.board, :black)
+    #self.board[2][4] =  King.new([2, 4], self.board, :black)
 
     self.print_board
 
@@ -72,6 +72,9 @@ class Board
     self.move([2,5],[4,5])
 
     self.print_board
+
+    p self.in_check?(:white)
+    p self.in_check?(:black)
 
   end
 
@@ -94,7 +97,28 @@ class Board
   end
 
   def in_check?(color)
+    king_position = find_king(color)
 
+    self.board.each_index do |row|
+      self.board.each_index do |col|
+        current = self.board[row][col]
+        unless current.class == EmptyTile || current.color == color
+          return true if current.moves.include?(king_position)
+        end
+      end
+    end
+    false
+  end
+
+  def find_king(color)
+    self.board.each_index do |row|
+      self.board.each_index do |col|
+        current = self.board[row][col]
+        unless current.class == EmptyTile
+          return [row, col] if current.class == King && current.color == color
+        end
+      end
+    end
   end
 
   def print_board
@@ -137,6 +161,7 @@ class Piece
     self.position = new_pos
     self.board[new_pos.first][new_pos.last] = self
   end
+
 
 end
 
@@ -313,10 +338,13 @@ class Pawn < Piece
     end
   end
 
+  def on_board?(pos)
+    (0..7).cover?(pos.first) && (0..7).cover?(pos.last)
+  end
+
   def valid?(pos)
-    if ((0..7).cover?(pos.first) &&
-        (0..7).cover?(pos.last)) &&
-        (board[pos.first][pos.last].class == Board::EmptyTile)
+    if (on_board?(pos) &&
+        board[pos.first][pos.last].class == Board::EmptyTile)
       return true
     end
     false
@@ -341,8 +369,10 @@ class Pawn < Piece
    end
 
   def piece_to_attack?(pos)
-    unless board[pos.first][pos.last].class == Board::EmptyTile
-      return self.color != board[pos.first][pos.last].color
+    if on_board?(pos)
+      unless board[pos.first][pos.last].class == Board::EmptyTile
+        return self.color != board[pos.first][pos.last].color
+      end
     end
     false
   end
