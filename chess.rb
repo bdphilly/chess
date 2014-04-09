@@ -25,43 +25,52 @@ class Board
       end
     end
 
-    self.board[0][0] = Rook.new([0, 0], self.board, :white)
-    self.board[0][1] = Knight.new([0, 1], self.board, :white)
-    self.board[0][2] =  Bishop.new([0, 2], self.board, :white)
-    self.board[0][3] =  Queen.new([0, 3], self.board, :white)
-    self.board[0][4] =  King.new([0, 4], self.board, :white)
-    self.board[0][5] =  Bishop.new([0, 5], self.board, :white)
-    self.board[0][6] =  Knight.new([0, 6], self.board, :white)
-    self.board[0][7] =  Rook.new([0, 7], self.board, :white)
-    # # self.board[1][0] =  Pawn.new([1, 0], self.board, :white)
-    # # self.board[1][1] =  Pawn.new([1, 1], self.board, :white)
-    # # self.board[1][2] =  Pawn.new([1, 2], self.board, :white)
-    # # self.board[1][3] =  Pawn.new([1, 3], self.board, :white)
-    # # self.board[1][4] =  Pawn.new([1, 4], self.board, :white)
-    # # self.board[1][5] =  Pawn.new([1, 5], self.board, :white)
-    # # self.board[1][6] =  Pawn.new([1, 6], self.board, :white)
-    # # self.board[1][7] =  Pawn.new([1, 7], self.board, :white)
-    #
-    self.board[7][0] = Rook.new([7, 0], self.board, :black)
-    self.board[7][1] = Knight.new([7, 1], self.board, :black)
-    self.board[7][2] =  Bishop.new([7, 2], self.board, :black)
-    self.board[7][3] =  Queen.new([7, 3], self.board, :black)
-    self.board[7][4] =  King.new([7, 4], self.board, :black)
-    self.board[7][5] =  Bishop.new([7, 5], self.board, :black)
-    self.board[7][6] =  Knight.new([7, 6], self.board, :black)
-    self.board[7][7] =  Rook.new([7, 7], self.board, :black)
-    # self.board[1][0] =  Pawn.new([1, 0], self.board, :white)
-    # self.board[1][1] =  Pawn.new([1, 1], self.board, :white)
-    # self.board[1][2] =  Pawn.new([1, 2], self.board, :white)
-    # self.board[1][3] =  Pawn.new([1, 3], self.board, :white)
-    # self.board[1][4] =  Pawn.new([1, 4], self.board, :white)
-    # self.board[1][5] =  Pawn.new([1, 5], self.board, :white)
-    # self.board[1][6] =  Pawn.new([1, 6], self.board, :white)
-    # self.board[1][7] =  Pawn.new([1, 7], self.board, :white)
+    1.times do
+
+      self.board[0][0] = Rook.new([0, 0], self.board, :white)
+      self.board[0][1] = Knight.new([0, 1], self.board, :white)
+      self.board[0][2] =  Bishop.new([0, 2], self.board, :white)
+      self.board[0][3] =  Queen.new([0, 3], self.board, :white)
+      self.board[0][4] =  King.new([0, 4], self.board, :white)
+      self.board[0][5] =  Bishop.new([0, 5], self.board, :white)
+      self.board[0][6] =  Knight.new([0, 6], self.board, :white)
+      self.board[0][7] =  Rook.new([0, 7], self.board, :white)
+      self.board[1][0] =  Pawn.new([1, 0], self.board, :white)
+      self.board[1][1] =  Pawn.new([1, 1], self.board, :white)
+      self.board[1][2] =  Pawn.new([1, 2], self.board, :white)
+      self.board[1][3] =  Pawn.new([1, 3], self.board, :white)
+      self.board[1][4] =  Pawn.new([1, 4], self.board, :white)
+      self.board[1][5] =  Pawn.new([1, 5], self.board, :white)
+      self.board[1][6] =  Pawn.new([1, 6], self.board, :white)
+      self.board[1][7] =  Pawn.new([1, 7], self.board, :white)
+      #
+      self.board[7][0] = Rook.new([7, 0], self.board, :black)
+      self.board[7][1] = Knight.new([7, 1], self.board, :black)
+      self.board[7][2] =  Bishop.new([7, 2], self.board, :black)
+      self.board[7][3] =  Queen.new([7, 3], self.board, :black)
+      self.board[7][4] =  King.new([7, 4], self.board, :black)
+      self.board[7][5] =  Bishop.new([7, 5], self.board, :black)
+      self.board[7][6] =  Knight.new([7, 6], self.board, :black)
+      self.board[7][7] =  Rook.new([7, 7], self.board, :black)
+      self.board[6][0] =  Pawn.new([6, 0], self.board, :black)
+      self.board[6][1] =  Pawn.new([6, 1], self.board, :black)
+      self.board[6][2] =  Pawn.new([6, 2], self.board, :black)
+      self.board[6][3] =  Pawn.new([6, 3], self.board, :black)
+      self.board[6][4] =  Pawn.new([6, 4], self.board, :black)
+      self.board[6][5] =  Pawn.new([6, 5], self.board, :black)
+      self.board[6][6] =  Pawn.new([6, 6], self.board, :black)
+      self.board[6][7] =  Pawn.new([6, 7], self.board, :black)
+
+    end #generate pieces
+
+    self.board[2][4] =  King.new([2, 4], self.board, :black)
 
     self.print_board
 
-    self.move([7,7],[0,7])
+    #self.move([1,],[2,0])
+    self.move([1,5],[2,5])
+    self.move([2,5],[4,5])
+
     self.print_board
 
   end
@@ -81,6 +90,10 @@ class Board
     else
       puts 'NOT A VALID MOVE!'
     end
+
+  end
+
+  def in_check?(color)
 
   end
 
@@ -259,13 +272,89 @@ end
 
 class Pawn < Piece
 
+  # def initialize(pos, board, color)
+  #   super(pos, board, color)
+  #   color == :white ? @display = "\u2659" : @display = "\u265F"
+  # end
+  #
+  # def moves
+  # end
+
+  attr_accessor :deltas, :display, :color, :attack_deltas
+
   def initialize(pos, board, color)
     super(pos, board, color)
+    set_deltas
     color == :white ? @display = "\u2659" : @display = "\u265F"
   end
 
   def moves
+    set_deltas # called multiple times!
+    [].tap do |valid_moves|
+      self.deltas.each do |each_delta|
+        current_position = self.position
+        self.initial_position? ? loop_times = 2 : loop_times = 1
+        loop_times.times do
+          current_position = (current_position.first + each_delta.first), (current_position.last + each_delta.last)
+          break unless valid?(current_position)
+          valid_moves << current_position
+        end
+      end
+
+      self.attack_deltas.each do |each_delta|
+        current_position = self.position
+        1.times do
+          current_position = (current_position.first + each_delta.first), (current_position.last + each_delta.last)
+          break unless piece_to_attack?(current_position)
+          valid_moves << current_position
+        end
+      end
+      p valid_moves
+    end
   end
+
+  def valid?(pos)
+    if ((0..7).cover?(pos.first) &&
+        (0..7).cover?(pos.last)) &&
+        (board[pos.first][pos.last].class == Board::EmptyTile)
+      return true
+    end
+    false
+  end
+
+  def initial_position?
+    if self.color == :white
+      self.position.first == 1
+    else
+      self.position.first == 6
+    end
+  end
+
+   def set_deltas
+     if self.color == :white
+       self.deltas = [[1,0]]
+       self.attack_deltas = [[1,-1], [1, 1]]
+     else
+       self.deltas = [[-1,0]]
+       self.attack_deltas = [[-1,-1], [-1, 1]]
+     end
+   end
+
+  def piece_to_attack?(pos)
+    unless board[pos.first][pos.last].class == Board::EmptyTile
+      return self.color != board[pos.first][pos.last].color
+    end
+    false
+  end
+
+  #check color
+  #is it on row 6 or row 1 / or check flag
+  #is there enemy piece diaganal to it?
+
+  #made first move?
+  #which direction can it go?
+  #can it attack?
+
 
 end
 
