@@ -63,19 +63,6 @@ class Board
 
     end #generate pieces
 
-    #self.board[2][4] =  King.new([2, 4], self.board, :black)
-
-    self.print_board
-
-    #self.move([1,],[2,0])
-    self.move([1,5],[2,5])
-    self.move([2,5],[4,5])
-
-    self.print_board
-
-    p self.in_check?(:white)
-    p self.in_check?(:black)
-
   end
 
   def move(start_pos, end_pos)
@@ -141,6 +128,29 @@ class Board
 end
 
 class Game
+  attr_accessor :game_board
+
+  def initialize
+    self.game_board = Board.new
+  end
+
+  def play
+
+    self.game_board.print_board
+
+    test = self.game_board.board[1][1].deep_dup_board
+
+    p test.class
+
+    test.move([1,1], [3,1])
+
+    #p self.game_board.board[1][1]
+
+
+    self.game_board.print_board
+    test.print_board
+  end
+
 end
 
 class Piece
@@ -162,6 +172,34 @@ class Piece
     self.board[new_pos.first][new_pos.last] = self
   end
 
+  def move_into_check?(pos)
+
+  end
+
+  def dup_piece(dupped_board_array)
+    return self.class.new(self.position, dupped_board_array, self.color)
+  end
+
+  def deep_dup_board
+
+    # some_board = Board.new
+    dupped_board_array = Array.new(8) { Array.new([]) * 8 }
+
+    dupped_board_array.each_index do |row|
+      dupped_board_array.each_index do |col|
+        if self.board[row][col].class == Board::EmptyTile
+          dupped_board_array[row][col] = Board::EmptyTile.new([row,col])
+        else
+          dupped_board_array[row][col] = self.board[row][col].dup_piece(dupped_board_array)
+        end
+      end
+    end
+
+    some_board = Board.new
+    some_board.board = dupped_board_array
+    some_board
+
+  end
 
 end
 
@@ -388,7 +426,8 @@ class Pawn < Piece
 
 end
 
-game_board = Board.new
+awesome_game = Game.new
+awesome_game.play
 # game_board.print_board
 # john_paul = Bishop.new([0, 0], game_board, :black)
 # p john_paul.moves
