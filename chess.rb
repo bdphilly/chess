@@ -73,7 +73,7 @@ class Board
 
     piece = self.board[start_pos.first][start_pos.last]
 
-    if piece.moves.include?(end_pos)
+    if piece.valid_moves.include?(end_pos) # piece.moves.include?(end_pos)
       piece.move_piece(end_pos)
       self.board[start_pos.first][start_pos.last] = EmptyTile.new(start_pos)
       puts 'MOVED'
@@ -95,6 +95,22 @@ class Board
       end
     end
     false
+  end
+
+  def checkmate?(color)
+
+    return false unless self.in_check?(color)
+
+    self.board.each_index do |row|
+      self.board.each_index do |col|
+        current = self.board[row][col]
+        unless current.class == EmptyTile || current.color != color
+          # p current.color
+          return false unless current.valid_moves.empty?
+        end
+      end
+    end
+    true
   end
 
   def find_king(color)
@@ -134,21 +150,45 @@ class Game
     self.game_board = Board.new
   end
 
+  def parse_input
+    letter_to_num = { "A" => 0,
+                      "B" => 1,
+                      "C" => 2,
+                      "D" => 3,
+                      "E" => 4,
+                      "F" => 5,
+                      "G" => 6,
+                      "H" => 7
+                    }
+
+
+  end
+
+
   def play
 
-    self.game_board.print_board
 
-    test = self.game_board.board[1][1].deep_dup_board
 
-    p test.class
-
-    test.move([1,1], [3,1])
-
-    #p self.game_board.board[1][1]
 
 
     self.game_board.print_board
-    test.print_board
+
+    bishop_john = self.game_board.board[3][7] = Bishop.new([3,7], self.game_board.board, :black )
+    queen_mary = self.game_board.board[0][3] = Queen.new([0,3], self.game_board.board, :black )
+    queen_mary = self.game_board.board[1][3] = Pawn.new([1,3], self.game_board.board, :black )
+    queen_mary = self.game_board.board[1][2] = Pawn.new([1,2], self.game_board.board, :black )
+
+
+
+    # self.game_board.move([3,3], [1,3])
+
+
+    self.game_board.print_board
+    puts self.game_board.checkmate?(:white)
+
+    # self.game_board.move([1,1], [2,1])
+    self.game_board.print_board
+
   end
 
 end
@@ -167,14 +207,35 @@ class Piece
   end
 
   def move_piece(new_pos)
-    self.board[self.position.first][self.position.last] = nil
+    self.board[self.position.first][self.position.last] = Board::EmptyTile.new(self.position)
+     # self.board[self.position.first][self.position.last] = nil
     self.position = new_pos
     self.board[new_pos.first][new_pos.last] = self
   end
 
   def move_into_check?(pos)
+      dupped_board = self.deep_dup_board
+
+      piece = dupped_board.board[self.position.first][self.position.last]
+      piece.move_piece(pos)
+      dupped_board.board[self.position.first][self.position.last] = Board::EmptyTile.new(self.position)
+
+      dupped_board.in_check?(self.color)
+  end
+
+  def valid_moves
+
+    [].tap do |doable_moves|
+
+      #puts  move_into_check?(moves.first)
+      self.moves.each do |move|
+        doable_moves << move unless move_into_check?(move)
+      end
+      p doable_moves
+    end
 
   end
+
 
   def dup_piece(dupped_board_array)
     return self.class.new(self.position, dupped_board_array, self.color)
@@ -227,6 +288,7 @@ class SlidingPiece < Piece
         end
       end
     end
+
   end
 
   def attackable?(pos)
@@ -372,7 +434,7 @@ class Pawn < Piece
           valid_moves << current_position
         end
       end
-      p valid_moves
+      # p valid_moves
     end
   end
 
