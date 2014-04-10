@@ -1,5 +1,8 @@
 require 'debugger'
 
+class InvalidMove < ArgumentError
+end
+
 class Board
 
   attr_accessor :board
@@ -61,24 +64,19 @@ class Board
       self.board[6][6] =  Pawn.new([6, 6], self.board, :black)
       self.board[6][7] =  Pawn.new([6, 7], self.board, :black)
 
-    end #generate pieces
+    end
 
   end
 
   def move(start_pos, end_pos)
-    # if board position (start_pos) contains a piece of your color
-    # and piece.moves contains end_pos in the array,
-    # it is a move you can make, otherwise exception
-    # check if it is an attack or just a move or if piece in the way
-
-    piece = self.board[start_pos.first][start_pos.last]
-
-    if piece.valid_moves.include?(end_pos) # piece.moves.include?(end_pos)
-      piece.move_piece(end_pos)
-      self.board[start_pos.first][start_pos.last] = EmptyTile.new(start_pos)
-      puts 'MOVED'
-    else
-      puts 'NOT A VALID MOVE!'
+    begin
+      piece = self.board[start_pos.first][start_pos.last]
+      if piece.valid_moves.include?(end_pos)
+        piece.move_piece(end_pos)
+        self.board[start_pos.first][start_pos.last] = EmptyTile.new(start_pos)
+      end
+    rescue
+      raise InvalidMove
     end
 
   end
@@ -105,7 +103,6 @@ class Board
       self.board.each_index do |col|
         current = self.board[row][col]
         unless current.class == EmptyTile || current.color != color
-          # p current.color
           return false unless current.valid_moves.empty?
         end
       end
@@ -124,16 +121,20 @@ class Board
     end
   end
 
+  def game_over? #not checking for stalemate
+    checkmate?(:black) || checkmate?(:white)
+  end
+
   def print_board
     puts
-    print "  0 1 2 3 4 5 6 7"
+    print "  A B C D E F G H"
     self.board.each_index do |row|
       puts
-      print "#{row} "
+      print "#{9 - ((row + 1) % 9)} "
       self.board.each_index do |col|
         print "#{self.board[row][col].display} "
       end
-      print "#{row} "
+      print "#{9 - ((row + 1) % 9)} "
     end
     puts
     print "  A B C D E F G H"
@@ -150,7 +151,7 @@ class Game
     self.game_board = Board.new
   end
 
-  def parse_input
+  def parse_input(user_input)
     letter_to_num = { "A" => 0,
                       "B" => 1,
                       "C" => 2,
@@ -161,33 +162,71 @@ class Game
                       "H" => 7
                     }
 
+    move = user_input.split(",")
+    move_start_1, move_end_1 = letter_to_num[move[0][0].upcase], letter_to_num[move[1][0].upcase]
+    move_start_2, move_end_2 = convert_num(move[0][1].to_i), convert_num(move[1][1].to_i)
+    [[move_start_2, move_start_1], [move_end_2, move_end_1]]
+  end
+
+  def convert_num(num)
+    7 - ((num - 1) % 8)
+  end
+
+  def player_piece?(player_move, player)
+
+    if game_board.board[player_move.first][player_move.last].color == :black && player == 1
+      return true
+    elsif game_board.board[player_move.first][player_move.last].color == :white && player == 2
+      return true
+    else
+      false
+    end
 
   end
 
-
   def play
 
+    system "clear"
 
+    puts "WELCOME TO CHESS"
+    puts "YOU ARE THE BLACK PLAYER"
+    puts
+    puts "GOOD LUCK!"
+    puts
 
+    player = 1
+    until self.game_board.game_over? do
 
+      self.game_board.print_board
+      puts
 
-    self.game_board.print_board
+      puts "Player ##{player}, What is your move?"
 
-    bishop_john = self.game_board.board[3][7] = Bishop.new([3,7], self.game_board.board, :black )
-    queen_mary = self.game_board.board[0][3] = Queen.new([0,3], self.game_board.board, :black )
-    queen_mary = self.game_board.board[1][3] = Pawn.new([1,3], self.game_board.board, :black )
-    queen_mary = self.game_board.board[1][2] = Pawn.new([1,2], self.game_board.board, :black )
+      begin
+        player_move = parse_input(gets.chomp)
 
+        until self.player_piece?(player_move.first, player) &&
+            self.game_board.board[player_move.first.first][player_move.first.last].
+            valid_moves.include?(player_move.last) do
 
+          puts "That ain't a valid move!"
+          # puts "Please choose the correct color piece."
+          player_move = parse_input(gets.chomp)
+        end
+        self.game_board.move(player_move.first, player_move.last)
+        # system("clear")
+      rescue InvalidMove
+        puts "Invalid move dummy!"
+        retry
+      rescue => e
+        puts e
+        puts "Enter a better move dummy!"
+        retry
+      end
 
-    # self.game_board.move([3,3], [1,3])
+      player == 1 ? player = 2 : player = 1
 
-
-    self.game_board.print_board
-    puts self.game_board.checkmate?(:white)
-
-    # self.game_board.move([1,1], [2,1])
-    self.game_board.print_board
+    end
 
   end
 
@@ -208,7 +247,6 @@ class Piece
 
   def move_piece(new_pos)
     self.board[self.position.first][self.position.last] = Board::EmptyTile.new(self.position)
-     # self.board[self.position.first][self.position.last] = nil
     self.position = new_pos
     self.board[new_pos.first][new_pos.last] = self
   end
@@ -227,11 +265,9 @@ class Piece
 
     [].tap do |doable_moves|
 
-      #puts  move_into_check?(moves.first)
       self.moves.each do |move|
         doable_moves << move unless move_into_check?(move)
       end
-      p doable_moves
     end
 
   end
@@ -242,8 +278,6 @@ class Piece
   end
 
   def deep_dup_board
-
-    # some_board = Board.new
     dupped_board_array = Array.new(8) { Array.new([]) * 8 }
 
     dupped_board_array.each_index do |row|
@@ -309,6 +343,7 @@ class SlidingPiece < Piece
   end
 
 end
+
 
 class Bishop < SlidingPiece
 
@@ -397,14 +432,6 @@ end
 
 class Pawn < Piece
 
-  # def initialize(pos, board, color)
-  #   super(pos, board, color)
-  #   color == :white ? @display = "\u2659" : @display = "\u265F"
-  # end
-  #
-  # def moves
-  # end
-
   attr_accessor :deltas, :display, :color, :attack_deltas
 
   def initialize(pos, board, color)
@@ -434,7 +461,6 @@ class Pawn < Piece
           valid_moves << current_position
         end
       end
-      # p valid_moves
     end
   end
 
@@ -477,19 +503,7 @@ class Pawn < Piece
     false
   end
 
-  #check color
-  #is it on row 6 or row 1 / or check flag
-  #is there enemy piece diaganal to it?
-
-  #made first move?
-  #which direction can it go?
-  #can it attack?
-
-
 end
 
 awesome_game = Game.new
 awesome_game.play
-# game_board.print_board
-# john_paul = Bishop.new([0, 0], game_board, :black)
-# p john_paul.moves
