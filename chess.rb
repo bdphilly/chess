@@ -1,5 +1,3 @@
-require 'debugger'
-
 class InvalidMove < ArgumentError
 end
 
@@ -27,45 +25,39 @@ class Board
         self.board[row][col] = EmptyTile.new([row,col])
       end
     end
-
-    1.times do
-
-      self.board[0][0] = Rook.new([0, 0], self.board, :white)
-      self.board[0][1] = Knight.new([0, 1], self.board, :white)
-      self.board[0][2] =  Bishop.new([0, 2], self.board, :white)
-      self.board[0][3] =  Queen.new([0, 3], self.board, :white)
-      self.board[0][4] =  King.new([0, 4], self.board, :white)
-      self.board[0][5] =  Bishop.new([0, 5], self.board, :white)
-      self.board[0][6] =  Knight.new([0, 6], self.board, :white)
-      self.board[0][7] =  Rook.new([0, 7], self.board, :white)
-      self.board[1][0] =  Pawn.new([1, 0], self.board, :white)
-      self.board[1][1] =  Pawn.new([1, 1], self.board, :white)
-      self.board[1][2] =  Pawn.new([1, 2], self.board, :white)
-      self.board[1][3] =  Pawn.new([1, 3], self.board, :white)
-      self.board[1][4] =  Pawn.new([1, 4], self.board, :white)
-      self.board[1][5] =  Pawn.new([1, 5], self.board, :white)
-      self.board[1][6] =  Pawn.new([1, 6], self.board, :white)
-      self.board[1][7] =  Pawn.new([1, 7], self.board, :white)
-      #
-      self.board[7][0] = Rook.new([7, 0], self.board, :black)
-      self.board[7][1] = Knight.new([7, 1], self.board, :black)
-      self.board[7][2] =  Bishop.new([7, 2], self.board, :black)
-      self.board[7][3] =  Queen.new([7, 3], self.board, :black)
-      self.board[7][4] =  King.new([7, 4], self.board, :black)
-      self.board[7][5] =  Bishop.new([7, 5], self.board, :black)
-      self.board[7][6] =  Knight.new([7, 6], self.board, :black)
-      self.board[7][7] =  Rook.new([7, 7], self.board, :black)
-      self.board[6][0] =  Pawn.new([6, 0], self.board, :black)
-      self.board[6][1] =  Pawn.new([6, 1], self.board, :black)
-      self.board[6][2] =  Pawn.new([6, 2], self.board, :black)
-      self.board[6][3] =  Pawn.new([6, 3], self.board, :black)
-      self.board[6][4] =  Pawn.new([6, 4], self.board, :black)
-      self.board[6][5] =  Pawn.new([6, 5], self.board, :black)
-      self.board[6][6] =  Pawn.new([6, 6], self.board, :black)
-      self.board[6][7] =  Pawn.new([6, 7], self.board, :black)
-
-    end
-
+    self.board[0][0] = Rook.new([0, 0], self.board, :white)
+    self.board[0][1] = Knight.new([0, 1], self.board, :white)
+    self.board[0][2] =  Bishop.new([0, 2], self.board, :white)
+    self.board[0][3] =  Queen.new([0, 3], self.board, :white)
+    self.board[0][4] =  King.new([0, 4], self.board, :white)
+    self.board[0][5] =  Bishop.new([0, 5], self.board, :white)
+    self.board[0][6] =  Knight.new([0, 6], self.board, :white)
+    self.board[0][7] =  Rook.new([0, 7], self.board, :white)
+    self.board[1][0] =  Pawn.new([1, 0], self.board, :white)
+    self.board[1][1] =  Pawn.new([1, 1], self.board, :white)
+    self.board[1][2] =  Pawn.new([1, 2], self.board, :white)
+    self.board[1][3] =  Pawn.new([1, 3], self.board, :white)
+    self.board[1][4] =  Pawn.new([1, 4], self.board, :white)
+    self.board[1][5] =  Pawn.new([1, 5], self.board, :white)
+    self.board[1][6] =  Pawn.new([1, 6], self.board, :white)
+    self.board[1][7] =  Pawn.new([1, 7], self.board, :white)
+    #
+    self.board[7][0] = Rook.new([7, 0], self.board, :black)
+    self.board[7][1] = Knight.new([7, 1], self.board, :black)
+    self.board[7][2] =  Bishop.new([7, 2], self.board, :black)
+    self.board[7][3] =  Queen.new([7, 3], self.board, :black)
+    self.board[7][4] =  King.new([7, 4], self.board, :black)
+    self.board[7][5] =  Bishop.new([7, 5], self.board, :black)
+    self.board[7][6] =  Knight.new([7, 6], self.board, :black)
+    self.board[7][7] =  Rook.new([7, 7], self.board, :black)
+    self.board[6][0] =  Pawn.new([6, 0], self.board, :black)
+    self.board[6][1] =  Pawn.new([6, 1], self.board, :black)
+    self.board[6][2] =  Pawn.new([6, 2], self.board, :black)
+    self.board[6][3] =  Pawn.new([6, 3], self.board, :black)
+    self.board[6][4] =  Pawn.new([6, 4], self.board, :black)
+    self.board[6][5] =  Pawn.new([6, 5], self.board, :black)
+    self.board[6][6] =  Pawn.new([6, 6], self.board, :black)
+    self.board[6][7] =  Pawn.new([6, 7], self.board, :black)
   end
 
   def move(start_pos, end_pos)
@@ -78,12 +70,10 @@ class Board
     rescue
       raise InvalidMove
     end
-
   end
 
   def in_check?(color)
     king_position = find_king(color)
-
     self.board.each_index do |row|
       self.board.each_index do |col|
         current = self.board[row][col]
@@ -139,7 +129,6 @@ class Board
     puts
     print "  A B C D E F G H"
     puts
-    puts
   end
 
 end
@@ -189,18 +178,16 @@ class Game
     system "clear"
 
     puts "WELCOME TO CHESS"
-    puts "YOU ARE THE BLACK PLAYER"
     puts
     puts "GOOD LUCK!"
-    puts
 
-    player = 1
+    player = "Black"
     until self.game_board.game_over? do
 
       self.game_board.print_board
       puts
 
-      puts "Player ##{player}, What is your move?"
+      puts "#{player} Player, What is your move?"
 
       begin
         player_move = parse_input(gets.chomp)
@@ -210,26 +197,22 @@ class Game
             valid_moves.include?(player_move.last) do
 
           puts "That ain't a valid move!"
-          # puts "Please choose the correct color piece."
           player_move = parse_input(gets.chomp)
         end
         self.game_board.move(player_move.first, player_move.last)
-        # system("clear")
+        system("clear")
       rescue InvalidMove
         puts "Invalid move dummy!"
         retry
-      rescue => e
-        puts e
+      rescue
         puts "Enter a better move dummy!"
         retry
       end
 
-      player == 1 ? player = 2 : player = 1
+      player == "Black" ? player = "White" : player = "Black"
 
     end
-
   end
-
 end
 
 class Piece
@@ -269,9 +252,7 @@ class Piece
         doable_moves << move unless move_into_check?(move)
       end
     end
-
   end
-
 
   def dup_piece(dupped_board_array)
     return self.class.new(self.position, dupped_board_array, self.color)
@@ -295,7 +276,6 @@ class Piece
     some_board
 
   end
-
 end
 
 class SlidingPiece < Piece
@@ -406,7 +386,6 @@ class SteppingPiece < Piece
     end
     false
   end
-
 end
 
 class Knight < SteppingPiece
@@ -427,7 +406,6 @@ class King < SteppingPiece
     @deltas = [[1, 0], [0, 1], [0, -1], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
     color == :white ? @display = "\u2654" : @display = "\u265A"
   end
-
 end
 
 class Pawn < Piece
